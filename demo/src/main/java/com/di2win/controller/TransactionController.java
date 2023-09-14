@@ -1,0 +1,72 @@
+package com.di2win.controller;
+
+import com.di2win.dto.StatementDto;
+import com.di2win.entity.Account;
+import com.di2win.entity.Transaction;
+import com.di2win.dto.TransactionDto;
+import com.di2win.entity.TransactionType;
+import com.di2win.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+@RestController
+@RequestMapping("/transaction")
+public class TransactionController {
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @RequestMapping(value = "/statement", method = RequestMethod.GET)
+    public ResponseEntity<List<Transaction>> statement(@RequestBody StatementDto statementDto) throws Exception {
+        List<Transaction> statement;
+
+        Transaction transaction = new Transaction();
+        Account account = new Account();
+        account.setAccount(statementDto.account());
+        account.setAgency(statementDto.agency());
+
+        for (TransactionType type : TransactionType.values()) {
+            if (type.name().equalsIgnoreCase(statementDto.transaction_type())) {
+                transaction.setTransactionType(TransactionType.valueOf(statementDto.transaction_type()));
+                break;
+            }
+        }
+
+        if(statementDto.from() == null && statementDto.until() == null) {
+            statement = transactionService.statement(account, null, null, transaction);
+        }else{
+            LocalDateTime from = LocalDateTime.parse(statementDto.from(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime until = LocalDateTime.parse(statementDto.until(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            statement = transactionService.statement(account, from, until, transaction);
+        }
+
+        return new ResponseEntity<>(statement, HttpStatus.OK);
+    }
+    @PostMapping("/createTransaction")
+    public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDto transaction) throws Exception {
+        Transaction newTransaction = this.transactionService.createTransaction(transaction);
+        return new ResponseEntity<>(newTransaction, HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/deposito", method = RequestMethod.POST)
+    public ResponseEntity<Transaction> deposit(@RequestBody TransactionDto transaction) throws Exception {
+        Transaction deposit = transactionService.deposit(transaction);
+        return new ResponseEntity<>(deposit, HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/saque", method = RequestMethod.POST)
+    public ResponseEntity<Transaction> withdraw(@RequestBody TransactionDto transaction) throws Exception {
+        Transaction withdraw = transactionService.withdraw(transaction);
+        return new ResponseEntity<>(withdraw, HttpStatus.CREATED);
+    }
+    @RequestMapping(value = "/getAllTrasactions", method = RequestMethod.GET)
+    public ResponseEntity<List<Transaction>> getAllTrasactions() {
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+}
