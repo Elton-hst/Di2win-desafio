@@ -65,4 +65,17 @@ BODY:
       "document": 11450434452
   }
 
+- Criar Tarefa 
+```
+$ http POST :8080/todos nome="Todo 1" descricao="Desc Todo 1" prioridade=1
 
+[
+  {
+    "descricao": "Desc Todo 1",
+    "id": 1,
+    "nome": "Todo 1",
+    "prioridade": 1,
+    "realizado": false
+  }
+]
+```
