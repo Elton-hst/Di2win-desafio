@@ -1,6 +1,9 @@
 # Di2win-desafio
 
-criando conta (POST):
+## API Endpoints
+
+- criando conta (POST):
+```
 URI:http://localhost:8080/creatAccount
 BODY:
 
@@ -14,7 +17,10 @@ primeira conta:
         "agency": 123,
         "accountType": "active"
     }
+```
     
+
+```
 segunda conta:
     {
         "name": "Teste2",
@@ -25,24 +31,30 @@ segunda conta:
         "agency": 123,
         "accountType": "active"
     }
+```
     
-realizando deposito (POST): 
+- realizando deposito (POST):
+```
 URI:http://localhost:8080/transaction/deposito
 BODY:
   {
       "value": 20,
       "reciverId": 1
   }
+```
   
-realizando saque (POST): 
+- realizando saque (POST):
+```
 URI:http://localhost:8080/transaction/deposito
 BODY:
   {
       "value": 20,
       "reciverId": 1
   }
+```
   
-criando transação (POST): 
+- criando transação (POST):
+```
 URI:http://localhost:8080/transaction/createTransaction
 BODY:
   {
@@ -50,32 +62,22 @@ BODY:
       "senderId": 2, 
       "reciverId": 1
   }
-  
-realizando consulta na conta (GET): 
+```
+- realizando consulta na conta (GET):
+```
 URI:localhost:8080/checkAccount
 BODY:
   {
       "document": 11450434452
   }
+```
 
-Bloqueio de conta (GET): 
+- Bloqueio de conta (GET):
+```
 URI:http://localhost:8080/blockAccount
 BODY:
   {
       "document": 11450434452
   }
 
-- Criar Tarefa 
-```
-$ http POST :8080/todos nome="Todo 1" descricao="Desc Todo 1" prioridade=1
-
-[
-  {
-    "descricao": "Desc Todo 1",
-    "id": 1,
-    "nome": "Todo 1",
-    "prioridade": 1,
-    "realizado": false
-  }
-]
 ```
