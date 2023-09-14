@@ -35,7 +35,7 @@ segunda conta:
     
 - realizando deposito (POST):
 ```
-URI:http://localhost:8080/transaction/deposito
+URI:http://localhost:8080/transaction/saque
 BODY:
   {
       "value": 20,
